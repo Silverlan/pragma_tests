@@ -1,4 +1,5 @@
-include("/pfm/pfm.lua")
+--include("/pfm/pfm.lua")
+include("/tests/pfm/base.lua")
 
 --pfm.launch(nil)
 
