@@ -32,6 +32,9 @@ local border = 20
 min = min - Vector(border, border, border)
 max = max + Vector(border, border, border)
 
+min = -Vector(100,100,100)
+max = Vector(100,100,100)
+
 print("Bounds: ",min,max)
 
 local entRefl = ents.create("env_reflection_probe")
@@ -46,5 +49,8 @@ local viewerC = entCam:AddComponent("viewer_camera")
 viewerC:FitViewToScene(min, max)
 viewerC:SetRotation(math.rad(-15), math.rad(20))
 viewerC:UpdatePose()
+
+local x = ents.create_prop("player/soldier")
+x:Spawn()
 
 return true, { screenshot = true }
