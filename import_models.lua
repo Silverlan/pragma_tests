@@ -1,3 +1,7 @@
+include("/pfm/pfm.lua")
+
+pfm.launch(nil)
+
 local models = { "headcrabclassic" }
 local tEnts = {}
 local min = Vector(math.huge, math.huge, math.huge)
