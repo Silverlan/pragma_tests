@@ -1,0 +1,47 @@
+name: Run Pragma Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  run-tests:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Download pragma-win64.zip
+      run: |
+        Invoke-WebRequest -Uri https://github.com/Silverlan/pragma/releases/download/nightly/pragma-win64.zip -OutFile pragma-win64.zip
+
+    - name: Extract pragma-win64.zip
+      run: |
+        Expand-Archive -Path pragma-win64.zip -DestinationPath .\pragma
+
+    - name: Checkout Import Tests
+      uses: actions/checkout@v4
+      with:
+        repository: Silverlan/pragma_tests_import
+        token: ${{ secrets.PRAGMA_TESTS_IMPORT_TOKEN }}
+        path: "pragma_tests_import"
+        ref: "226f5978a0cd3962aa4133dc1eee9e0c044dfee9"
+
+    - name: Copy Import Tests files
+      shell: bash
+      run: |
+        cp -rf pragma_tests_import/* pragma/
+        rm -rf pragma_tests_import
+
+    - name: Run Pragma Tests
+      uses: Silverlan/pragma/github_actions/run_tests@v1
+      with:
+        test-scripts: |
+          "tests/import_assets.udm"
+        working-directory: "pragma"
+        artifacts-name: "import"
