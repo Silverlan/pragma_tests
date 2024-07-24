@@ -2,7 +2,7 @@ include("/pfm/pfm.lua")
 
 pfm.launch(nil)
 
-local models = { "headcrabclassic" }
+--[[local models = { "headcrabclassic" }
 local tEnts = {}
 local min = Vector(math.huge, math.huge, math.huge)
 local max = Vector(-math.huge, -math.huge, -math.huge)
@@ -52,7 +52,7 @@ obsC:SetActive(false)
 local viewerC = entCam:AddComponent("viewer_camera")
 viewerC:FitViewToScene(min, max)
 viewerC:SetRotation(math.rad(-15), math.rad(20))
-viewerC:UpdatePose()
+viewerC:UpdatePose()]]
 
 local x = ents.create_prop("player/soldier")
 x:Spawn()
