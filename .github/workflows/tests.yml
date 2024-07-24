@@ -38,6 +38,8 @@ jobs:
         cp -rf pragma_tests_import/* pragma/
         rm -rf pragma_tests_import
 
+        cp -f import_models.lua pragma/lua/tests/import_models.lua
+
     - name: Run Pragma Tests
       uses: Silverlan/pragma/github_actions/run_tests@main
       with:
