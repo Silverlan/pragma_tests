@@ -1,6 +1,6 @@
 include("/pfm/pfm.lua")
 
-pfm.launch(nil)
+--pfm.launch(nil)
 
 --[[local models = { "headcrabclassic" }
 local tEnts = {}
@@ -54,8 +54,32 @@ viewerC:FitViewToScene(min, max)
 viewerC:SetRotation(math.rad(-15), math.rad(20))
 viewerC:UpdatePose()]]
 
-local x = ents.create_prop("player/soldier")
-x:Spawn()
+--local x = ents.create_prop("player/soldier")
+--x:Spawn()
+
+tests.launch_pfm(function(pm)
+	pm:LoadProject("projects/scenebuilds/pfm_demo_scene")
+	local vp = pm:GetViewport()
+	if util.is_valid(vp) then
+		vp:SetWorkCameraPose(
+			math.Transform(
+				Vector(-105.66, 54.0945, -65.6428),
+				EulerAngles(6.95692, -171.594, -0.000267118):ToQuaternion()
+			)
+		)
+
+		--[[pm:GoToWindow("render")
+		local render = pm:GetWindow("render")
+		if util.is_valid(render) then
+			render:SetRenderer("cycles")
+			render:AddCallback("OnRenderComplete", function()
+				tests.complete(true, { screenshot = true })
+			end)
+			render:Refresh(true)
+		end]]
+	end
+end)
+
 
 game.wait_for_frames(30, function()
     tests.complete(true, { screenshot = true })
