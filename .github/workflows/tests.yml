@@ -40,6 +40,7 @@ jobs:
 
         cp -f import_models.lua pragma/lua/tests/import_models.lua
         cp -f fs_pbr.gls pragma/shaders/world/pbr/fs_pbr.gls
+        cp -f vs_world.gls pragma/shaders/modules/vs_world.gls
         cp -f vs_textured.gls pragma/shaders/world/vs_textured.gls
 
     - name: Run Pragma Tests

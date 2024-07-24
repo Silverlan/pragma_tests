@@ -1,0 +1,69 @@
+#ifndef F_VS_WORLD_GLS
+#define F_VS_WORLD_GLS
+
+#include "vs_weighted.gls"
+#include "vs_buffer_locations.gls"
+#include "sh_vertex_data.gls"
+#include "sh_normalmapping.gls"
+#include "sh_parallaxmapping.gls"
+#include "sh_vertex_data.gls"
+#include "sh_material.gls"
+
+#include "../functions/sh_vector_to_depth.gls"
+#include "../lighting/sh_lighting.gls"
+#include "../modules/sh_csm.gls"
+#include "../modules/sh_rendersettings.gls"
+#include "../modules/sh_camera_info.gls"
+#include "../modules/sh_math.gls"
+#include "../modules/vs_vertex_animation.gls"
+#include "../modules/light_map/vs_lightmap.gls"
+#include "../modules/vs_instanced_entity_data.gls"
+#include "../modules/vs_sky_camera.gls"
+#include "../modules/sh_clip_plane.gls"
+#include "../math/depth_bias.gls"
+
+layout(location = SHADER_VERTEX_BUFFER_LOCATION) in vec3 in_vert_pos;
+layout(location = SHADER_UV_BUFFER_LOCATION) in vec2 in_vert_uv;
+layout(location = SHADER_NORMAL_BUFFER_LOCATION) in vec3 in_vert_normal;
+
+#include "vs_light.gls"
+
+void export_world_fragment_data(mat4 mdlMatrix,vec3 vpos)
+{
+	mat4 V = get_view_matrix();
+
+	vec3 vertNorm = in_vert_normal.xyz;
+	vec4 vertPos = vec4(vpos,1.0);
+	mat4 mBone;
+
+	//mat4 MV = V *mdlMatrix;
+	//mat4 MVP = u_camera.P *MV;
+
+	vec4 vposWs = mdlMatrix *vertPos;
+
+	mat4 P = u_camera.P;
+	gl_Position = API_DEPTH_TRANSFORM(P) *V *vposWs;
+
+	vposWs.xyz /= vposWs.w;
+	vposWs.w = 1.0;
+
+	//if(CSPEC_ENABLE_CLIPPING == 1)
+		apply_clip_plane(u_pushConstants.scene.clipPlane,vposWs.xyz);
+	//else
+	//	gl_ClipDistance[0] = 1.0;
+	
+	vs_out.vert_pos_ws = vposWs.xyz;
+	vs_out.M = mdlMatrix;
+	vs_out.color = get_instanced_instance_color();
+	//vs_out.vert_pos = vertPos;
+	//vs_out.vert_pos_cs = (V *vposWs).xyz;
+
+	vs_out.vert_normal = vertNorm;
+	vs_out.vert_uv = in_vert_uv.xy;
+}
+
+void export_world_fragment_data(vec3 vertPos) {export_world_fragment_data(get_instanced_model_matrix(),vertPos);}
+
+void export_world_fragment_data() {export_world_fragment_data(in_vert_pos.xyz);}
+
+#endif
