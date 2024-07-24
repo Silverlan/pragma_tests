@@ -53,4 +53,6 @@ viewerC:UpdatePose()
 local x = ents.create_prop("player/soldier")
 x:Spawn()
 
-return true, { screenshot = true }
+game.wait_for_frames(30, function()
+    tests.complete(true, { screenshot = true })
+end, true)
