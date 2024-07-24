@@ -1,4 +1,4 @@
-include("/pfm/pfm.lua")
+include("/tests/pfm/base.lua")
 
 tests.launch_pfm(function(pm)
 
